@@ -12,6 +12,10 @@ Log = logging.getLogger(__name__)
 
 
 class RattlePyApplication(object):
+	"""
+	The main application object that prepares the server application
+	together with an asynchronous loop. It utilizes Messenger and Executor.
+	"""
 
 	def __init__(self):
 		# At the beginning, there is no async loop running
