@@ -1,7 +1,13 @@
+import logging
 import asyncio
 
 import aiohttp
 import aiohttp.web
+
+from .messenger import Messenger
+
+
+Log = logging.getLogger(__name__)
 
 
 class RattlePyApplication(object):
@@ -11,6 +17,9 @@ class RattlePyApplication(object):
 		self.Loop = None
 		self.WebApplication = None
 		self.Routes = []
+
+		# Publish-subscribe mechanism
+		self.Messenger = Messenger()
 
 	def serve(self):
 		# Create new event loop
@@ -28,9 +37,10 @@ class RattlePyApplication(object):
 	def prepare_routes(self):
 		"""
 		This method is meant to be overriden by your specific implementation.
-		:return: None
+		:return:
 		"""
 		self.Routes.append(aiohttp.web.get("/hello-world/{name}", self.hello_world))
+		self.Messenger.subscribe("hello-world", self.endpoint_called)
 
 	async def hello_world(self, request):
 		"""
@@ -39,6 +49,13 @@ class RattlePyApplication(object):
 		:param request: request
 		:return: response
 		"""
+		name = request.match_info["name"]
+		await self.Messenger.publish("hello-world", name)
 		return aiohttp.web.Response(
-			text="Hello, {}!".format(request.match_info.get("name", "world"))
+			text="Hello, {}!".format(name)
+		)
+
+	async def endpoint_called(self, message_name, message):
+		Log.warning(
+			"Endpoint '{}' was successfully called with obtained request data '{}'.".format(message_name, message)
 		)
