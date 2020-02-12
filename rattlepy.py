@@ -6,7 +6,8 @@ import aiohttp
 
 class MyServerApplication(rattlepy.RattlePyApplication):
 	"""
-	An example custom application with a simple route added.
+	An example custom application with a simple route added,
+	that returns JSON response.
 	"""
 
 	def prepare_routes(self):
