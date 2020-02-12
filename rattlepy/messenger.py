@@ -1,4 +1,7 @@
 class Messenger(object):
+	"""
+	A simple implementation of publish-subscribe mechanism.
+	"""
 
 	# Performance optimization
 	EmptyList = []

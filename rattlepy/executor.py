@@ -3,6 +3,10 @@ import concurrent.futures
 
 
 class Executor(object):
+	"""
+	Executes synchronous tasks on threads, that are connected
+	to a provided asynchronous loop.
+	"""
 
 	def __init__(self, loop):
 		self.Loop = loop
