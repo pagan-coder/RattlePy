@@ -23,19 +23,16 @@ class RattlePyApplication(object):
 		# Publish-subscribe mechanism
 		self.Messenger = Messenger()
 
-		# Executor to perform long synchronous tasks on threads
-		self.Executor = None
-
-	def serve(self):
 		# Create new event loop
 		self.Loop = asyncio.get_event_loop()
 		if self.Loop.is_closed():
 			self.Loop = asyncio.new_event_loop()
 			asyncio.set_event_loop(self.Loop)
 
-		# Prepare the executor
+		# Executor to perform long synchronous tasks on threads
 		self.Executor = Executor(loop=self.Loop)
 
+	def serve(self):
 		# Prepare aiohttp application
 		self.WebApplication = aiohttp.web.Application(loop=self.Loop)
 		self.prepare_routes()
